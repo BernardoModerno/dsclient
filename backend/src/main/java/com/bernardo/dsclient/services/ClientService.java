@@ -1,14 +1,13 @@
 package com.bernardo.dsclient.services;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,10 +24,9 @@ public class ClientService {
 	private ClientRepository repository;
 
 	@Transactional(readOnly = true)
-	public List<ClientDTO> findAll() {
-		List<Client> list = repository.findAll();
-
-		return list.stream().map(x -> new ClientDTO(x)).collect(Collectors.toList());
+	public Page<ClientDTO> findAllPaged(PageRequest pageRequest) {
+		Page<Client> list = repository.findAll(pageRequest);
+		return list.map(x -> new ClientDTO(x));
 	}
 
 	@Transactional(readOnly = true)
@@ -40,9 +38,23 @@ public class ClientService {
 	}
 
 	@Transactional
-	public ClientDTO insert(ClientDTO dto) {
+	public ClientDTO insert(ClientDTO dto) {   
 		Client entity = new Client();
-		entity.setName(dto.getName());
+		if (dto.getName() != null) {
+			entity.setName(dto.getName());
+		}
+		if (dto.getCpf() != null) {
+			entity.setCpf(dto.getCpf());
+		}
+		if (dto.getBirthDate() != null) {
+			entity.setBirthDate(dto.getBirthDate());
+		}
+		if (dto.getChildren() != null) {
+			entity.setChildren(dto.getChildren());
+		}
+		if (dto.getIncome() != null) {
+			entity.setIncome(dto.getIncome());
+		}
 		entity = repository.save(entity);
 		return new ClientDTO(entity);
 
