@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-DsclientApplication<dsclient>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "com.bernardo.dsclient.DsclientApplication",
+            "projectName": "dsclient",
+            "args": ""
+        }
+    ]
+}
